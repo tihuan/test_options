@@ -4,7 +4,7 @@ class AddPropertiesToDeal < ActiveRecord::Migration
       t.belongs_to :trade_date, index: true
       t.date :due_date
       t.integer :open_price
-      t.integer :deal_price
+      t.integer :close_price
       t.string :due_type
     end
   end
