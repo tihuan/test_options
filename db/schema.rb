@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 20150112004353) do
     t.date     "due_date"
     t.integer  "open_price"
     t.integer  "close_price"
+    t.integer  "final_price"
     t.string   "due_type"
   end
 

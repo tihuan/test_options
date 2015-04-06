@@ -5,6 +5,7 @@ class AddPropertiesToDeal < ActiveRecord::Migration
       t.date :due_date
       t.integer :open_price
       t.integer :close_price
+      t.integer :final_price
       t.string :due_type
     end
   end
