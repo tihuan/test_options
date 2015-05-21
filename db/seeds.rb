@@ -1,6 +1,6 @@
-# MAKE SURE all_deals.csv date format is mm/dd/yyyy
 require 'CSV'
 require 'pry'
+# MAKE SURE all_deals.csv date format is mm/dd/yyyy
 
 ActiveRecord::Base.transaction do
   def trade_dates(year)
@@ -65,7 +65,7 @@ ActiveRecord::Base.transaction do
   puts "\n\n\n\n\n\n\nFORMATTED TRADE DATES:"
   p formatted_trade_dates
 
-  all_deals = CSV.read 'all_deals.csv'
+  all_deals = CSV.read 'updated_deals.csv'
   puts "\n\n\n\n\n\n\nALL DEALS:"
   p all_deals
 
