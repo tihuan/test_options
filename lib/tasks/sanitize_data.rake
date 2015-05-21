@@ -29,12 +29,18 @@ task :sanitize => :environment do |t|
 
   def fill_missing_day_data(missing_day, missing_days)
     missing_day = DateTime.strptime(missing_day, '%m/%d/%Y')
-    new_deals = []
+
     next_trade_day = missing_day.tomorrow
     next_trade_day = next_trade_day.tomorrow while missing_days.include? next_trade_day.strftime('%m/%d/%Y')
-    next_trade_day_deals = @updated_deals.select { |deal| deal['date'] == next_trade_day.strftime('%m/%d/%Y') }.dup
+    next_available_trade_day_deals = @updated_deals.select { |deal| deal['date'] == next_trade_day.strftime('%m/%d/%Y') }.dup
 
-    next_trade_day_deals.each { |deal| deal.dup['date'] = missing_day.strftime('%m/%d/%Y') }
+    # filled_deals += next_available_trade_day_deals.map { |deal| deal.tap { |deal| deal['date'] = missing_day.strftime('%m/%d/%Y') } }
+    next_available_trade_day_deals.map do |new_deal|
+      new_deal = CSV::Row.new(HEADERS, new_deal.to_a.map { |cell| cell[1] })
+      new_deal['date'] = missing_day.strftime('%m/%d/%Y')
+
+      new_deal
+    end
   end
 
   def write_file
@@ -49,8 +55,9 @@ task :sanitize => :environment do |t|
   # binding.pry
   fill_prices
   missing_days = find_missing_days
-  missing_days_data = missing_days[0..2].map { |missing_day| fill_missing_day_data(missing_day, missing_days) }
-  @updated_deals.concat(missing_days_data).flatten!
+  p missing_days[0..1]
+  missing_days_data = missing_days[0..1].map { |missing_day| fill_missing_day_data(missing_day, missing_days) }
+  @updated_deals.concat(missing_days_data).flatten!.sort_by! { |deal| deal['date'] }
   write_file
   # binding.pry
 end
