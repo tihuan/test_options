@@ -49,11 +49,20 @@ ActiveRecord::Base.transaction do
       date = Date.strptime(deal[0],'%m/%d/%Y')
       due_date = Date.strptime(formatted_due_date, '%m/%d/%Y')
       open_price = deal[3].to_i
+      max_price = deal[4].to_i
+      min_price = deal[5].to_i
       close_price = deal[6].to_i
       final_price = deal[-2].to_i
       due_type = deal[-1]
 
-      deal = Deal.create(due_date: due_date, open_price: open_price, close_price: close_price, final_price: final_price, due_type: due_type)
+      deal = Deal.create(
+        due_date: due_date,
+        open_price: open_price,
+        max_price: max_price,
+        min_price: min_price,
+        close_price: close_price,
+        final_price: final_price,
+        due_type: due_type)
       new_trade_date.deals << deal
     end
   end
