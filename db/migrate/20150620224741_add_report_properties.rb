@@ -18,7 +18,7 @@ class AddReportProperties < ActiveRecord::Migration
         all_deals_due_date
         all_deals_buy_price
         deals_total_value
-        net_gaine
+        net_gain
         -
         total_net_gain
         cash
