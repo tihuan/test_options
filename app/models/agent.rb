@@ -2,6 +2,10 @@ class Agent < ActiveRecord::Base
   has_many :agent_deals
   has_many :deals, through: :agent_deals
 
+  def initiate
+    @report = Report.create
+  end
+
   def buy(deal)
     self.balance -= deal.open_price
     self.deals << deal
@@ -15,7 +19,7 @@ class Agent < ActiveRecord::Base
 
   def sell(deal)
     self.balance += deal.close_price
-    self.deals.find_by(due_date: deal.due_date).delete
+    reference_deal = self.deals.find_by(due_date: deal.due_date).delete
     puts '-' * 10
     puts 'selling deal:'
     puts '-' * 10
