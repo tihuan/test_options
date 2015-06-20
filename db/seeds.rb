@@ -65,7 +65,7 @@ ActiveRecord::Base.transaction do
   puts "\n\n\n\n\n\n\nFORMATTED TRADE DATES:"
   p formatted_trade_dates
 
-  all_deals = CSV.read 'updated_deals.csv'
+  all_deals = CSV.read 'updated_all_deals.csv'
   puts "\n\n\n\n\n\n\nALL DEALS:"
   p all_deals
 

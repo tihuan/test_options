@@ -7,7 +7,7 @@ task :sanitize => :environment do |t|
   @updated_deals = []
 
   def fill_prices
-    all_deals = CSV.foreach('test.csv', headers: true) do |deal|
+    all_deals = CSV.foreach('all_deals.csv', headers: true) do |deal|
       if deal['open_price'] == '-'
         ALL_PRICES.each do |header|
           deal[header] = deal['final_price']
@@ -18,7 +18,7 @@ task :sanitize => :environment do |t|
   end
 
   def find_missing_days
-    all_deals = CSV.read('test.csv', headers: true)
+    all_deals = CSV.read('all_deals.csv', headers: true)
     currently_available_days = all_deals['date'].uniq
     first_day = DateTime.strptime('7/21/1998', '%m/%d/%Y')
     end_of_last_year = DateTime.strptime("12/31/#{Time.now.year - 1}", '%m/%d/%Y')
@@ -44,7 +44,7 @@ task :sanitize => :environment do |t|
   end
 
   def write_file
-    CSV.open('updated_test.csv', 'w') do |csv|
+    CSV.open('updated_all_deals.csv', 'w') do |csv|
       csv << HEADERS
       @updated_deals.each do |updated_deal|
         csv.puts updated_deal
@@ -55,8 +55,7 @@ task :sanitize => :environment do |t|
   # binding.pry
   fill_prices
   missing_days = find_missing_days
-  p missing_days[0..1]
-  missing_days_data = missing_days[0..1].map { |missing_day| fill_missing_day_data(missing_day, missing_days) }
+  missing_days_data = missing_days.map { |missing_day| fill_missing_day_data(missing_day, missing_days) }
   @updated_deals.concat(missing_days_data).flatten!.sort_by! { |deal| deal['date'] }
   write_file
   # binding.pry
