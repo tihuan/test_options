@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150112004353) do
+ActiveRecord::Schema.define(version: 20150620224741) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,12 +38,28 @@ ActiveRecord::Schema.define(version: 20150112004353) do
     t.integer  "trade_date_id"
     t.date     "due_date"
     t.integer  "open_price"
+    t.integer  "max_price"
+    t.integer  "min_price"
     t.integer  "close_price"
     t.integer  "final_price"
     t.string   "due_type"
   end
 
   add_index "deals", ["trade_date_id"], name: "index_deals_on_trade_date_id", using: :btree
+
+  create_table "reports", force: :cascade do |t|
+    t.datetime "created_at",                                                                                                                                                                                                                                                                                    null: false
+    t.datetime "updated_at",                                                                                                                                                                                                                                                                                    null: false
+    t.integer  "agent_id"
+    t.string   "headers",    default: "due_date,open_price,min_price,close_price,final_price,-,buy_due_date,buy_price,-,sell_due_date,sell_price,-,all_deals_due_date,all_deals_buy_price,deals_total_value,net_gain,-,total_net_gain,cash,total,-,deal_min_price,period_min_price,diff_deal_period_min_price"
+  end
+
+  add_index "reports", ["agent_id"], name: "index_reports_on_agent_id", using: :btree
+
+  create_table "reports_deals", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "trade_dates", force: :cascade do |t|
     t.datetime "created_at", null: false
