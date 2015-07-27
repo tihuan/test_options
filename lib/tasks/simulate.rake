@@ -30,6 +30,8 @@ task :trade, [:buy_due_type, :sell_due_type] => :environment do |t, args|
   end
 
   a = Agent.create
+  r = Report.create
+  a.reports << r
   # years = [2007]
   years = (1998..2013).to_a
   trade_dates = years.map { |year| trade_dates(year) }.flatten

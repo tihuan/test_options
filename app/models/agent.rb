@@ -1,10 +1,7 @@
 class Agent < ActiveRecord::Base
   has_many :agent_deals
   has_many :deals, through: :agent_deals
-
-  def initiate
-    @report = Report.create
-  end
+  has_many :reports
 
   def buy(deal)
     self.balance -= deal.open_price

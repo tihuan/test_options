@@ -2,7 +2,7 @@ class AddReportProperties < ActiveRecord::Migration
   def change
     change_table :reports do |t|
       t.belongs_to :agent, index: true
-      t.string :headers, default: %w(
+      t.string :print_rows, default: [%w(
         due_date
         open_price
         min_price
@@ -26,7 +26,7 @@ class AddReportProperties < ActiveRecord::Migration
         -
         deal_min_price
         period_min_price
-        diff_deal_period_min_price).join(',')
+        diff_deal_period_min_price)].to_json
     end
   end
 end
