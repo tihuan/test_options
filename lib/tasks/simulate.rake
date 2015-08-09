@@ -41,13 +41,13 @@ task :trade, [:buy_due_type, :sell_due_type] => :environment do |t, args|
   first_available_trade_date = TradeDate.find_by(trade_date: Date.strptime('8/19/1998', '%m/%d/%Y'))
   first_available_trade_date_index = sorted_trade_dates.index first_available_trade_date
   # binding.pry
-  trade_dates = sorted_trade_dates[first_available_trade_date_index..-1]
+  effective_trade_dates = sorted_trade_dates[first_available_trade_date_index..-1]
   # first record is 8/19/1998, but first trade date is 7/21/1998..
-  first_trade_date = trade_dates.shift
+  first_trade_date = effective_trade_dates.shift
   p "Starting balance: #{a.balance}"
   a.buy first_trade_date.get_deal args[:buy_due_type]
 
-  trade_dates.each do |trade_date|
+  effective_trade_dates.each do |trade_date|
     p "trade date: #{trade_date.trade_date}"
     a.trade(trade_date.get_deal(args[:buy_due_type]), trade_date.get_deal(args[:sell_due_type]))
   end
