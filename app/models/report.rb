@@ -1,8 +1,6 @@
 # 1. Add map for headers and print row
 class Report < ActiveRecord::Base
   belongs_to :agent
-  has_many :reports_deals
-  has_many :deals, through: :reports_deals
   after_initialize :set_rows, :set_header_indices
   attr_accessor :rows
 
@@ -10,8 +8,8 @@ class Report < ActiveRecord::Base
     rows
   end
 
-  def add_hi
-    rows << 'hi'
+  def print_trade_date_deals(trade_date)
+
   end
 
   def add_row(args = {})

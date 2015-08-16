@@ -56,11 +56,6 @@ ActiveRecord::Schema.define(version: 20150620224741) do
 
   add_index "reports", ["agent_id"], name: "index_reports_on_agent_id", using: :btree
 
-  create_table "reports_deals", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "trade_dates", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
