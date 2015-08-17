@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150620224741) do
+ActiveRecord::Schema.define(version: 20150816222029) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,11 +47,17 @@ ActiveRecord::Schema.define(version: 20150620224741) do
 
   add_index "deals", ["trade_date_id"], name: "index_deals_on_trade_date_id", using: :btree
 
+  create_table "report_rows", force: :cascade do |t|
+    t.string   "content",    default: "[]"
+    t.string   "headers",    default: "[\"due_date\",\"open_price\",\"min_price\",\"close_price\",\"final_price\",\"-\",\"buy_due_date\",\"buy_price\",\"-\",\"sell_due_date\",\"sell_price\",\"-\",\"all_deals_due_date\",\"all_deals_buy_price\",\"deals_total_value\",\"net_gain\",\"-\",\"total_net_gain\",\"cash\",\"total\",\"-\",\"deal_min_price\",\"period_min_price\",\"diff_deal_period_min_price\"]"
+    t.datetime "created_at",                                                                                                                                                                                                                                                                                                                                                                                      null: false
+    t.datetime "updated_at",                                                                                                                                                                                                                                                                                                                                                                                      null: false
+  end
+
   create_table "reports", force: :cascade do |t|
-    t.datetime "created_at",                                                                                                                                                                                                                                                                                                                                                                                        null: false
-    t.datetime "updated_at",                                                                                                                                                                                                                                                                                                                                                                                        null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer  "agent_id"
-    t.string   "print_rows", default: "[[\"due_date\",\"open_price\",\"min_price\",\"close_price\",\"final_price\",\"-\",\"buy_due_date\",\"buy_price\",\"-\",\"sell_due_date\",\"sell_price\",\"-\",\"all_deals_due_date\",\"all_deals_buy_price\",\"deals_total_value\",\"net_gain\",\"-\",\"total_net_gain\",\"cash\",\"total\",\"-\",\"deal_min_price\",\"period_min_price\",\"diff_deal_period_min_price\"]]"
   end
 
   add_index "reports", ["agent_id"], name: "index_reports_on_agent_id", using: :btree
