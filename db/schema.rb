@@ -49,10 +49,13 @@ ActiveRecord::Schema.define(version: 20150816222029) do
 
   create_table "report_rows", force: :cascade do |t|
     t.string   "content",    default: "[]"
-    t.string   "headers",    default: "[\"due_date\",\"open_price\",\"min_price\",\"close_price\",\"final_price\",\"-\",\"buy_due_date\",\"buy_price\",\"-\",\"sell_due_date\",\"sell_price\",\"-\",\"all_deals_due_date\",\"all_deals_buy_price\",\"deals_total_value\",\"net_gain\",\"-\",\"total_net_gain\",\"cash\",\"total\",\"-\",\"deal_min_price\",\"period_min_price\",\"diff_deal_period_min_price\"]"
-    t.datetime "created_at",                                                                                                                                                                                                                                                                                                                                                                                      null: false
-    t.datetime "updated_at",                                                                                                                                                                                                                                                                                                                                                                                      null: false
+    t.integer  "report_id"
+    t.string   "headers",    default: "[\"trade_date\",\"due_date\",\"open_price\",\"min_price\",\"close_price\",\"final_price\",\"-\",\"buy_due_date\",\"buy_price\",\"-\",\"sell_due_date\",\"sell_price\",\"-\",\"all_deals_due_date\",\"all_deals_buy_price\",\"deals_total_value\",\"net_gain\",\"-\",\"total_net_gain\",\"cash\",\"total\",\"-\",\"deal_min_price\",\"period_min_price\",\"diff_deal_period_min_price\"]"
+    t.datetime "created_at",                                                                                                                                                                                                                                                                                                                                                                                                     null: false
+    t.datetime "updated_at",                                                                                                                                                                                                                                                                                                                                                                                                     null: false
   end
+
+  add_index "report_rows", ["report_id"], name: "index_report_rows_on_report_id", using: :btree
 
   create_table "reports", force: :cascade do |t|
     t.datetime "created_at", null: false

@@ -44,6 +44,7 @@ task :trade, [:buy_due_type, :sell_due_type] => :environment do |t, args|
   effective_trade_dates = sorted_trade_dates[first_available_trade_date_index..-1]
   # first record is 8/19/1998, but first trade date is 7/21/1998..
   first_trade_date = effective_trade_dates.shift
+  r.print_all_deals first_trade_date.deals
   p "Starting balance: #{a.balance}"
   a.buy first_trade_date.get_deal args[:buy_due_type]
 

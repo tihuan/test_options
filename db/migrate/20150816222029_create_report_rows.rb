@@ -2,7 +2,9 @@ class CreateReportRows < ActiveRecord::Migration
   def change
     create_table :report_rows do |t|
       t.string :content, default: '[]'
+      t.belongs_to :report, index: true
       t.string :headers, default: %w(
+        trade_date
         due_date
         open_price
         min_price
