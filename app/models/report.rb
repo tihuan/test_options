@@ -3,10 +3,6 @@ class Report < ActiveRecord::Base
   belongs_to :agent
   has_many :report_rows
 
-  def print_trade_date_deals(trade_date)
-
-  end
-
   def add(args = {})
     report_row = ReportRow.create
     report_row.update args

@@ -4,6 +4,7 @@ class Agent < ActiveRecord::Base
   has_many :reports
 
   def buy(deal)
+    last_report = reports.last
     self.balance -= deal.open_price
     self.deals << deal
     puts '-' * 10
@@ -11,6 +12,16 @@ class Agent < ActiveRecord::Base
     puts '-' * 10
     puts "due date: #{deal.due_date} @open_price: #{deal.open_price}"
     puts "current balance: #{self.balance}"
+
+    buy_details  = {
+      trade_date: deal.trade_date.trade_date,
+      buy_due_date: deal.due_date,
+      buy_price: deal.open_price,
+      cash: self.balance,
+      total:
+    }
+    report.add buy_details
+
     self.save
   end
 
