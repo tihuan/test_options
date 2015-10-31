@@ -55,4 +55,13 @@ task :trade, [:buy_due_type, :sell_due_type] => :environment do |t, args|
 
   p "here's your result:"
   p a.balance
+
+  # Output excel
+  lines = r.report_rows.map { |row| JSON.parse(row.content)  }
+  CSV.open('trade_result.csv', 'w') do |csv|
+    csv << JSON.parse(r.report_rows.first.headers)
+    lines.each do |line|
+      csv.puts line
+    end
+  end
 end
