@@ -20,6 +20,7 @@ class Agent < ActiveRecord::Base
     puts "all deal cost: #{all_deal_cost}"
 
     buy_details = {
+      due_date: 0,
       trade_date: deal.trade_date.trade_date,
       buy_due_date: deal.due_date,
       buy_price: deal.open_price,
@@ -47,6 +48,7 @@ class Agent < ActiveRecord::Base
     puts "all deal cost: #{all_deal_cost}"
 
     sell_details = {
+      due_date: 1,
       trade_date: deal.trade_date.trade_date,
       sell_due_date: deal.due_date,
       sell_price: deal.close_price,
@@ -63,6 +65,7 @@ class Agent < ActiveRecord::Base
   end
 
   def trade(buy_deal, sell_deal)
+    last_report.print_all_deals buy_deal.trade_date.deals
     buy buy_deal
     sell sell_deal
     puts '_' * 20
