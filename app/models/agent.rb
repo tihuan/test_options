@@ -62,6 +62,7 @@ class Agent < ActiveRecord::Base
       trade_date: deal.trade_date.trade_date,
       sell_due_date: deal.due_date,
       sell_price: sell_price,
+      deal_min_price: deal.min_price,
       cash: self.balance,
       total:  self.balance + all_deal_cost,
       net_gain: net_gain,
