@@ -1,5 +1,5 @@
 class Agent < ActiveRecord::Base
-  has_many :agent_deals
+  has_many :agent_deals, autosave: true
   has_many :deals, through: :agent_deals
   has_many :reports
 
@@ -38,22 +38,34 @@ class Agent < ActiveRecord::Base
 
   def sell(deal)
     self.balance += deal.close_price
-    reference_deal = self.deals.find_by(due_date: deal.due_date)
-    deals.delete reference_deal
+    reference_deal = deals.find_by(due_date: deal.due_date)
+
+    sell_price = deal.close_price
+    agent_deal = AgentDeal.find_by(deal_id: reference_deal)
+    cost = agent_deal.cost
+    net_gain = sell_price - cost
+    agent_deals.update(agent_deal.id, net_gain: net_gain, sold_date: deal.trade_date.trade_date)
+    puts '-' * 10
+    puts 'AGENT DEAL'
+    p agent_deal
+    puts "\n\n\n\n"
+
     puts '-' * 10
     puts 'selling deal:'
     puts '-' * 10
     puts "due date: #{deal.due_date} @close_price: #{deal.close_price}"
-    puts "current balance: #{self.balance}"
+    puts "current balance: #{balance}"
     puts "all deal cost: #{all_deal_cost}"
 
     sell_details = {
       due_date: 1,
       trade_date: deal.trade_date.trade_date,
       sell_due_date: deal.due_date,
-      sell_price: deal.close_price,
+      sell_price: sell_price,
       cash: self.balance,
-      total:  self.balance + all_deal_cost
+      total:  self.balance + all_deal_cost,
+      net_gain: net_gain,
+      total_net_gain: total_net_gain
     }
 
     puts "\n\n\n\n"
@@ -76,7 +88,18 @@ class Agent < ActiveRecord::Base
   private
 
   def all_deal_cost
-    agent_deals.map(&:cost).reduce(:+)
+    agent_deals.reload
+    agent_deals
+      .reject { |agent_deal| agent_deal.sold_date.present? }
+      .map(&:cost)
+      .reduce(:+)
+  end
+
+  def total_net_gain
+    agent_deals.reload
+    agent_deals
+      .map(&:net_gain)
+      .reduce(&:+)
   end
 
   def last_report
