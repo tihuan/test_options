@@ -65,3 +65,4 @@ task :trade, [:buy_due_type, :sell_due_type] => :environment do |t, args|
     end
   end
 end
+

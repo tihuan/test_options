@@ -19,11 +19,12 @@ ActiveRecord::Schema.define(version: 20150926214533) do
   create_table "agent_deals", force: :cascade do |t|
     t.integer  "agent_id"
     t.integer  "deal_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
     t.integer  "cost"
+    t.date     "bought_date"
     t.date     "sold_date"
-    t.integer  "net_gain",   default: 0
+    t.integer  "net_gain",    default: 0
   end
 
   add_index "agent_deals", ["agent_id"], name: "index_agent_deals_on_agent_id", using: :btree

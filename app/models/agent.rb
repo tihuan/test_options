@@ -4,7 +4,11 @@ class Agent < ActiveRecord::Base
   has_many :reports
 
   def buy(deal)
-    agent_deals.create(deal: deal, cost: deal.open_price)
+    agent_deals.create(
+      bought_date: deal.trade_date.trade_date,
+      deal: deal,
+      cost: deal.open_price
+    )
     # ad = AgentDeal.new
     # ad.agent = self
     # ad.deal = deal
@@ -20,7 +24,7 @@ class Agent < ActiveRecord::Base
     puts "all deal cost: #{all_deal_cost}"
 
     buy_details = {
-      due_date: 0,
+      due_date: 100,
       trade_date: deal.trade_date.trade_date,
       buy_due_date: deal.due_date,
       buy_price: deal.open_price,
@@ -32,6 +36,7 @@ class Agent < ActiveRecord::Base
     p buy_details
 
     last_report.add buy_details
+    print_inventory deal.trade_date.trade_date
 
     self.save
   end
@@ -44,7 +49,13 @@ class Agent < ActiveRecord::Base
     agent_deal = AgentDeal.find_by(deal_id: reference_deal)
     cost = agent_deal.cost
     net_gain = sell_price - cost
-    agent_deals.update(agent_deal.id, net_gain: net_gain, sold_date: deal.trade_date.trade_date)
+
+    agent_deals.update(
+      agent_deal.id,
+      net_gain: net_gain,
+      sold_date: deal.trade_date.trade_date
+    )
+
     puts '-' * 10
     puts 'AGENT DEAL'
     p agent_deal
@@ -58,7 +69,7 @@ class Agent < ActiveRecord::Base
     puts "all deal cost: #{all_deal_cost}"
 
     sell_details = {
-      due_date: 1,
+      due_date: 200,
       trade_date: deal.trade_date.trade_date,
       sell_due_date: deal.due_date,
       sell_price: sell_price,
@@ -87,6 +98,31 @@ class Agent < ActiveRecord::Base
   end
 
   private
+
+  def print_inventory(trade_date)
+    agent_deals.reload
+    agent_deals
+      .reject { |agent_deal| agent_deal.sold_date.present? }
+      .each_with_index do |agent_deal, index|
+        deal_detail = {
+          trade_date: trade_date,
+          due_date: 101 + index,
+          all_deals_due_date: agent_deal.deal.due_date,
+          all_deals_buy_price: agent_deal.cost
+        }
+        last_report.add deal_detail
+      end
+
+    summary = {
+      trade_date: trade_date,
+      due_date: 199,
+      deals_total_value: all_deal_cost,
+      cash: balance,
+      total: all_deal_cost + balance
+    }
+
+    last_report.add summary
+  end
 
   def all_deal_cost
     agent_deals.reload
